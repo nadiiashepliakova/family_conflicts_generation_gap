@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solving Conflicts to Bridge Generation Gap</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem 0 1rem;
+        }
+
+        header h1 {
+            margin: 0 0 1rem 0;
+            font-size: 2.2rem;
+        }
+
+        /* Стилі для Learning Objectives у шапці */
+        .header-objectives {
+            background-color: #34495e;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            display: inline-block;
+            text-align: left;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            font-size: 0.95rem;
+        }
+
+        .header-objectives h3 {
+            margin: 0 0 0.5rem 0;
+            color: #3498db;
+            font-size: 1.1rem;
+        }
+
+        .header-objectives ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 0;
+            color: #ecf0f1;
+        }
+
+        .header-objectives li {
+            padding: 0.2rem 0;
+            border-bottom: none;
+            display: list-item;
+            font-size: 0.95rem;
+        }
+        
+        .header-objectives li::before {
+            content: none;
+        }
+
+        /* Стилі для вкладок */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background-color: #1a252f;
+            color: #bdc3c7;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab-btn:hover {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .tab-btn.active {
+            background-color: #f4f7f6;
+            color: #2c3e50;
+        }
+
+        /* Основний контейнер */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 20px 40px 20px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Загальні стилі для карток */
+        .questions-box, .content-card {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-top: 6px solid #3498db;
+            margin-bottom: 2rem;
+        }
+
+        .questions-box h2, .content-card h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            font-size: 1.15rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        li::before {
+            content: "👉";
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Стилі для вкладки Warming up */
+        .image-container {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        /* Стилі для вкладки Vocabulary Practice */
+        .phrase-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 1.5rem 0 2rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed #bdc3c7;
+        }
+
+        .phrase-bank span {
+            background-color: #2c3e50;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .gap-sentence {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            line-height: 2;
+        }
+
+        input[type="text"] {
+            border: none;
+            border-bottom: 2px solid #3498db;
+            background-color: #f0f8ff;
+            font-size: 1.1rem;
+            font-family: inherit;
+            padding: 2px 8px;
+            width: 150px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-bottom: 2px solid #e74c3c;
+            background-color: #fff;
+        }
+
+        input[type="text"].correct {
+            border-bottom: 2px solid #27ae60;
+            background-color: #eafaf1;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        input[type="text"].incorrect {
+            border-bottom: 2px solid #e74c3c;
+            background-color: #fdedec;
+            color: #e74c3c;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-check {
+            background-color: #3498db;
+        }
+
+        .btn-check:hover {
+            background-color: #2980b9;
+        }
+
+        #vocab-result {
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            margin-bottom: 2rem;
+        }
+
+        /* Стилі для вкладки Reading */
+        .reading-text {
+            background-color: #fff;
+            padding: 2rem;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-top: 1.5rem;
+            animation: fadeIn 0.4s;
+        }
+
+        .reading-text h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .question-letter {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #e74c3c;
+            margin-right: 5px;
+        }
+
+        /* Стилі поля Task */
+        .task-box {
+            font-size: 1.15rem; 
+            background-color: #e8f4f8; 
+            padding: 1rem; 
+            border-left: 5px solid #3498db; 
+            border-radius: 4px;
+            margin-bottom: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Кнопка-стрілочка */
+        .toggle-btn {
+            background-color: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        .toggle-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .toggle-btn::before {
+            content: "▼";
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+
+        .toggle-btn.open::before {
+            content: "▲";
+        }
+
+        /* Блок з текстом */
+        .text-content {
+            display: none;
+            margin-top: 1rem;
+            animation: fadeIn 0.4s;
+        }
+
+        .text-content.show {
+            display: block;
+        }
+
+        .recommendation-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-left: 5px solid #e74c3c;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Стилі для Task 3 (тест) */
+        .mcq-container {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e1e8ed;
+            margin-bottom: 1rem;
+        }
+
+        .mcq-question {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #2c3e50;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .mcq-option:hover {
+            background-color: #e8f4f8;
+        }
+
+        .mcq-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .mcq-option label {
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .mcq-option.correct {
+            background-color: #d4edda;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .mcq-option.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #mcq-result {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        /* Стиль для фінального обговорення на вкладці Reading */
+        .discussion-box {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-left: 5px solid #2c3e50;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .discussion-box h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+        }
+
+        .discussion-box ol {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .discussion-box li {
+            display: list-item;
+            font-size: 1.15rem;
+            padding: 0.5rem 0;
+            border-bottom: none;
+        }
+
+        .discussion-box li::before {
+            content: none;
+        }
+
+        /* Стилі для вкладки Writing */
+        .writing-instruction {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .writing-task-box {
+            background-color: #fdfdfd;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .writing-task-box h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px dashed #bdc3c7;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Поле для заповнення пропусків у Writing */
+        .fill-gap {
+            border: none;
+            border-bottom: 2px solid #3498db;
+            background-color: #f0f8ff;
+            font-size: 1.1rem;
+            font-family: inherit;
+            padding: 2px 8px;
+            width: 140px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        .fill-gap:focus {
+            outline: none;
+            border-bottom: 2px solid #e74c3c;
+            background-color: #fff;
+        }
+        .fill-gap.correct {
+            border-bottom: 2px solid #27ae60;
+            background-color: #eafaf1;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .fill-gap.incorrect {
+            border-bottom: 2px solid #e74c3c;
+            background-color: #fdedec;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Solving Conflicts to Bridge Generation Gap</h1>
+        
+        <div class="header-objectives">
+            <h3>Learning Outcomes:</h3>
+            <p style="color: #ecf0f1; margin: 0 0 0.5rem 0;">By the end of the lesson you will be able to:</p>
+            <ul>
+                <li>understand the main ideas in the text;</li>
+                <li>use active vocabulary units while describing family conflicts;</li>
+                <li>find solutions for family conflicts and give pieces of advice.</li>
+            </ul>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'warming-up')">Warming up</button>
+            <button class="tab-btn" onclick="openTab(event, 'vocab-practice')">Vocabulary Practice</button>
+            <button class="tab-btn" onclick="openTab(event, 'reading')">Reading</button>
+            <button class="tab-btn" onclick="openTab(event, 'writing')">Writing</button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- ВКЛАДКА 1: WARMING UP -->
+        <div id="warming-up" class="tab-content active">
+            <div class="image-container">
+                <img src="gap.jpg" alt="Teenager on phone vs Parents reading newspaper">
+            </div>
+
+            <div class="questions-box">
+                <h2>Discuss the following questions:</h2>
+                <ul>
+                    <li>Look at the picture. What can you see?</li>
+                    <li>Which people do you identify with?</li>
+                    <li>What kind of relationship might these family members have?</li>
+                    <li>Do they have any arguments?</li>
+                    <li>What might the reasons be?</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ВКЛАДКА 2: VOCABULARY PRACTICE -->
+        <div id="vocab-practice" class="tab-content">
+            <div class="content-card">
+                <h2>Vocabulary Practice</h2>
+                <p><strong>Fill in the gaps.</strong> Type the correct form of the phrase into the boxes. You can use the words from the phrase bank below.</p>
+                
+                <div class="phrase-bank">
+                    <span>fall out</span>
+                    <span>order</span>
+                    <span>threaten to</span>
+                    <span>identify with</span>
+                    <span>depend on</span>
+                    <span>talk into</span>
+                    <span>accuse of</span>
+                    <span>deny</span>
+                </div>
+
+                <div id="gap-fill-form">
+                    <div class="gap-sentence">
+                        1. Teenagers often <input type="text" id="q1" autocomplete="off"> their parents <input type="text" id="q2" autocomplete="off"> being too controlling, while parents feel their children never listen to them.
+                    </div>
+                    <div class="gap-sentence">
+                        2. Many young people <input type="text" id="q3" autocomplete="off"> their favourite influencers more than their own family members, which can widen the generation gap.
+                    </div>
+                    <div class="gap-sentence">
+                        3. After a serious argument, it took the whole family weeks to make up — nobody wants to <input type="text" id="q4" autocomplete="off"> over such small things again.
+                    </div>
+                    <div class="gap-sentence">
+                        4. Parents sometimes <input type="text" id="q5" autocomplete="off"> their children <input type="text" id="q6" autocomplete="off"> giving up their dreams, which only makes the conflict worse.
+                    </div>
+                    <div class="gap-sentence">
+                        5. It's unfair to <input type="text" id="q7" autocomplete="off"> young people <input type="text" id="q8" autocomplete="off"> being lazy just because they communicate differently.
+                    </div>
+                    <div class="gap-sentence">
+                        6. He <input type="text" id="q9" autocomplete="off"> run away from home after the argument, but his older brother calmed him down.
+                    </div>
+                    <div class="gap-sentence">
+                        7. I hate it when relatives <input type="text" id="q10" autocomplete="off"> me <input type="text" id="q11" autocomplete="off"> not caring about the family, just because I moved to another city.
+                    </div>
+                    <div class="gap-sentence">
+                        8. The boy <input type="text" id="q12" autocomplete="off"> delete his social media accounts if his parents didn't stop checking his phone.
+                    </div>
+
+                    <div class="btn-container">
+                        <button class="btn btn-check" onclick="checkVocab()">Check Answers</button>
+                    </div>
+                    
+                    <div id="vocab-result"></div>
+                </div>
+
+                <div class="discussion-box" style="border-left-color: #3498db;">
+                    <h3 style="color: #2c3e50;">Discussion:</h3>
+                    <p style="font-size: 1.15rem;">Which of these situations are true for you?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ВКЛАДКА 3: READING -->
+        <div id="reading" class="tab-content">
+            <div class="content-card">
+                <h2>Reading</h2>
+                
+                <div class="questions-box" style="box-shadow: none; border-top: none; padding: 0; margin-bottom: 1.5rem;">
+                    <h3 style="color: #2c3e50; margin-bottom: 1rem;">Before you read:</h3>
+                    <ul>
+                        <li>What types of things do teenagers argue about with their parents?</li>
+                    </ul>
+                </div>
+
+                <!-- Task 1 -->
+                <div class="task-box" style="margin-bottom: 1.5rem;">
+                    <div>
+                        <strong>Task 1:</strong> Read the post from a website that helps teenagers with their problems. Does Zoe talk about any things from your list?
+                    </div>
+                    <button class="toggle-btn" id="toggleTextBtn1" onclick="toggleText1()"></button>
+                </div>
+                
+                <div class="text-content" id="readingTextContent1">
+                    <div class="reading-text">
+                        <h3>ZOE, 14 years old, London</h3>
+                        <p style="margin-top: 1rem;">
+                            <span class="question-letter">Q</span> I'm writing to you because of my problems at home. I'm having a really hard time at the moment. I have arguments with my parents about everything! For example, my mum and dad never knock before coming into my bedroom! When I'm sitting at my desk doing my homework, my mum interrupts me. She tells me how untidy my room is and says that I need to clean it. She doesn't understand that I have a lot of things to do. Later on she comes back to tell me to turn my music down. I don't think it's loud. But then we start shouting. She says that it's impossible to do homework and listen to music at the same time and tells me to switch it off completely. But she doesn't realise that the music helps my concentration. Please help. I don't know what to do!
+                        </p>
+                    </div>
+
+                    <div class="recommendation-box">
+                        💡 What would you recommend?
+                    </div>
+                </div>
+
+                <!-- Task 2 -->
+                <div class="task-box" style="margin-top: 2rem;">
+                    <div>
+                        <strong>Task 2:</strong> Read advice from an expert. Do they mention any of your ideas? Which ones?
+                    </div>
+                    <button class="toggle-btn" id="toggleTextBtn2" onclick="toggleText2()"></button>
+                </div>
+
+                <div class="text-content" id="readingTextContent2">
+                    <div class="reading-text">
+                        <h3>Our expert says ...</h3>
+                        <p style="margin-top: 1rem;">
+                            <span class="question-letter">A</span> You want your parents to treat you with respect. But show them respect, too. You say you have a lot to do but I'm sure your mother is also busy. You don't want to tidy your bedroom when you're doing your homework. So, decide on a time that is convenient for you. Tell your mum what time that is. Then make sure you do it! As for the music, parents and teenagers always argue about music. Speak to your mum calmly. Explain that it helps you to study. But keep it to a reasonable volume or use headphones. And finally, your bedroom. Maybe your parents don't realise that you're not a little child any more. Explain why you think it's important to have a private space. Maybe you're spending a lot of time in your bedroom and your parents don't see you or get a chance to speak to you. When you talk to parents it makes a big difference. Tell them what's happening in your life.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Task 3 -->
+                <div class="task-box" style="margin-top: 2rem;">
+                    <div>
+                        <strong>Task 3:</strong> Choose the best answers according to the text.
+                    </div>
+                    <button class="toggle-btn" id="toggleTextBtn3" onclick="toggleText3()"></button>
+                </div>
+
+                <div class="text-content" id="readingTextContent3">
+                    <div class="mcq-container" id="mcq-form">
+                        <!-- Питання 1 -->
+                        <div class="mcq-question">1. Zoe is angry with her mum because she says her mum doesn't ...</div>
+                        <div class="mcq-option" id="opt-1a"><input type="radio" name="mcq1" value="a"><label>a) tidy Zoe's bedroom.</label></div>
+                        <div class="mcq-option" id="opt-1b"><input type="radio" name="mcq1" value="b"><label>b) realise how busy Zoe is.</label></div>
+                        <div class="mcq-option" id="opt-1c"><input type="radio" name="mcq1" value="c"><label>c) want Zoe to do her homework.</label></div>
+                        <br>
+
+                        <!-- Питання 2 -->
+                        <div class="mcq-question">2. Zoe's mum has a problem with Zoe's music because she ...</div>
+                        <div class="mcq-option" id="opt-2a"><input type="radio" name="mcq2" value="a"><label>a) doesn't think it helps Zoe concentrate.</label></div>
+                        <div class="mcq-option" id="opt-2b"><input type="radio" name="mcq2" value="b"><label>b) doesn't like the style of music.</label></div>
+                        <div class="mcq-option" id="opt-2c"><input type="radio" name="mcq2" value="c"><label>c) can't do her work with loud music.</label></div>
+                        <br>
+
+                        <!-- Питання 3 -->
+                        <div class="mcq-question">3. The expert thinks that Zoe's mum ...</div>
+                        <div class="mcq-option" id="opt-3a"><input type="radio" name="mcq3" value="a"><label>a) is right to tell Zoe to tidy her room.</label></div>
+                        <div class="mcq-option" id="opt-3b"><input type="radio" name="mcq3" value="b"><label>b) is right to stop Zoe in the middle of her homework.</label></div>
+                        <div class="mcq-option" id="opt-3c"><input type="radio" name="mcq3" value="c"><label>c) is right to decide what time Zoe should clean her room.</label></div>
+                        <br>
+
+                        <!-- Питання 4 -->
+                        <div class="mcq-question">4. The expert thinks that Zoe can do what she likes with her music ...</div>
+                        <div class="mcq-option" id="opt-4a"><input type="radio" name="mcq4" value="a"><label>a) because parents are never happy with their children's music.</label></div>
+                        <div class="mcq-option" id="opt-4b"><input type="radio" name="mcq4" value="b"><label>b) if she talks to them about it.</label></div>
+                        <div class="mcq-option" id="opt-4c"><input type="radio" name="mcq4" value="c"><label>c) within certain limits.</label></div>
+                        <br>
+
+                        <!-- Питання 5 -->
+                        <div class="mcq-question">5. The expert says that ...</div>
+                        <div class="mcq-option" id="opt-5a"><input type="radio" name="mcq5" value="a"><label>a) it's normal for Zoe's parents to enter her bedroom without knocking.</label></div>
+                        <div class="mcq-option" id="opt-5b"><input type="radio" name="mcq5" value="b"><label>b) maybe Zoe's parents want her to communicate with them more.</label></div>
+                        <div class="mcq-option" id="opt-5c"><input type="radio" name="mcq5" value="c"><label>c) Zoe's parents don't want her to have a private space because she's too young.</label></div>
+
+                        <div class="btn-container">
+                            <button class="btn btn-check" onclick="checkMcq()">Check Answers</button>
+                        </div>
+                        <div id="mcq-result"></div>
+                    </div>
+                </div>
+
+                <!-- Доданий блок Discussion для Reading -->
+                <div class="discussion-box">
+                    <h3>Discussion:</h3>
+                    <ol>
+                        <li>What are these arguments caused by?</li>
+                        <li>What is generation gap?</li>
+                        <li>What can we do to bridge generation gap?</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ВКЛАДКА 4: WRITING -->
+        <div id="writing" class="tab-content">
+            <div class="content-card">
+                <h2>Writing</h2>
+                
+                <!-- Task 1 (Тепер у випадаючому списку) -->
+                <div class="task-box" style="margin-bottom: 1.5rem;">
+                    <div>
+                        <strong>Task 1:</strong> Read one more post and fill in the gaps with missed words.
+                    </div>
+                    <button class="toggle-btn" id="toggleWritingTextBtn" onclick="toggleWritingText()"></button>
+                </div>
+                
+                <div class="text-content" id="writingTextContent">
+                    <div class="writing-task-box">
+                        <h4>New Post:</h4>
+                        <p>Hi, I need some advice. My parents and I constantly <input type="text" class="fill-gap" id="w1" placeholder="..."> over my future career. They try to <input type="text" class="fill-gap" id="w2" placeholder="..."> me to study medicine, but I want to be a graphic designer. They often <input type="text" class="fill-gap" id="w3" placeholder="..."> me <input type="text" class="fill-gap" id="w4" placeholder="..."> being unrealistic, but I <input type="text" class="fill-gap" id="w5" placeholder="..."> that art isn't a real job. I <input type="text" class="fill-gap" id="w6" placeholder="..."> creative people online who make a living from design. My parents even <input type="text" class="fill-gap" id="w7" placeholder="..."> cut off my pocket money if I don't apply to medical school. I know their support <input type="text" class="fill-gap" id="w8" placeholder="..."> my choices, but I can't let them <input type="text" class="fill-gap" id="w9" placeholder="..."> me <input type="text" class="fill-gap" id="w10" placeholder="..."> a life I don't want. How can we solve this without ruining our relationship?</p>
+                        
+                        <div class="btn-container" style="margin-top: 1rem; margin-bottom: 0;">
+                            <button class="btn btn-check" onclick="checkWritingGaps()">Check Answers</button>
+                        </div>
+                        <div id="writing-result" style="font-weight: bold; font-size: 1.2rem; margin-top: 1rem;"></div>
+                    </div>
+                </div>
+
+                <hr style="border: 1px solid #e1e8ed; margin: 2rem 0;">
+
+                <!-- Task 2 (Змінене завдання без поля для введення) -->
+                <div class="writing-instruction" style="background-color: #e8f4f8; padding: 1.5rem; border-left: 5px solid #3498db; border-radius: 4px;">
+                    <p style="margin: 0;"><strong>Task 2:</strong> Write an answer with 2-3 pieces of advice. Use at least 7 active vocabulary units. Underline them in the text.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Функція для перемикання вкладок
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+
+        // Функція для показу/приховування Тексту 1 (Reading)
+        function toggleText1() {
+            var content = document.getElementById("readingTextContent1");
+            var btn = document.getElementById("toggleTextBtn1");
+            
+            if (content.classList.contains("show")) {
+                content.classList.remove("show");
+                btn.classList.remove("open");
+            } else {
+                content.classList.add("show");
+                btn.classList.add("open");
+            }
+        }
+
+        // Функція для показу/приховування Тексту 2 (Reading)
+        function toggleText2() {
+            var content = document.getElementById("readingTextContent2");
+            var btn = document.getElementById("toggleTextBtn2");
+            
+            if (content.classList.contains("show")) {
+                content.classList.remove("show");
+                btn.classList.remove("open");
+            } else {
+                content.classList.add("show");
+                btn.classList.add("open");
+            }
+        }
+
+        // Функція для показу/приховування Тексту 3 (Reading)
+        function toggleText3() {
+            var content = document.getElementById("readingTextContent3");
+            var btn = document.getElementById("toggleTextBtn3");
+            
+            if (content.classList.contains("show")) {
+                content.classList.remove("show");
+                btn.classList.remove("open");
+            } else {
+                content.classList.add("show");
+                btn.classList.add("open");
+            }
+        }
+
+        // Функція для показу/приховування Тексту (Writing Task 1)
+        function toggleWritingText() {
+            var content = document.getElementById("writingTextContent");
+            var btn = document.getElementById("toggleWritingTextBtn");
+            
+            if (content.classList.contains("show")) {
+                content.classList.remove("show");
+                btn.classList.remove("open");
+            } else {
+                content.classList.add("show");
+                btn.classList.add("open");
+            }
+        }
+
+        // Функція для перевірки вправи (Vocabulary Practice)
+        function checkVocab() {
+            const answers = {
+                q1: ["accuse", "accused"],
+                q2: ["of"],
+                q3: ["identify with", "identifies with"],
+                q4: ["fall out"],
+                q5: ["talk", "talking"],
+                q6: ["into"],
+                q7: ["accuse"],
+                q8: ["of"],
+                q9: ["threatened to", "threatens to", "threaten to"],
+                q10: ["accuse"],
+                q11: ["of"],
+                q12: ["threatened to", "threatens to", "threaten to"]
+            };
+
+            let score = 0;
+            let total = Object.keys(answers).length;
+
+            for (let key in answers) {
+                const input = document.getElementById(key);
+                input.classList.remove("correct", "incorrect");
+                
+                let userAnswer = input.value.trim().toLowerCase();
+
+                if (userAnswer !== "") {
+                    if (answers[key].includes(userAnswer)) {
+                        input.classList.add("correct");
+                        score++;
+                    } else {
+                        input.classList.add("incorrect");
+                    }
+                } else {
+                    input.classList.add("incorrect");
+                }
+            }
+
+            const resultDiv = document.getElementById("vocab-result");
+            resultDiv.innerHTML = `You scored ${score} out of ${total}.`;
+            
+            if (score === total) {
+                resultDiv.style.color = "#27ae60";
+                resultDiv.innerHTML += " 🎉 Perfect! You've mastered these phrases.";
+            } else {
+                resultDiv.style.color = "#e74c3c";
+                resultDiv.innerHTML += " Keep trying! Check the red boxes.";
+            }
+        }
+
+        // Функція для перевірки тесту (Task 3)
+        function checkMcq() {
+            const correctAnswers = {
+                mcq1: "b",
+                mcq2: "a",
+                mcq3: "a",
+                mcq4: "c",
+                mcq5: "b"
+            };
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+
+            // Очищаємо попередні стилі
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`opt-${i}a`).classList.remove("correct", "incorrect");
+                document.getElementById(`opt-${i}b`).classList.remove("correct", "incorrect");
+                document.getElementById(`opt-${i}c`).classList.remove("correct", "incorrect");
+            }
+
+            // Перевіряємо відповіді
+            for (let q in correctAnswers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                
+                if (selected) {
+                    const qNum = q.replace('mcq', '');
+                    const selectedOpt = document.getElementById(`opt-${qNum}${selected.value}`);
+                    const correctOpt = document.getElementById(`opt-${qNum}${correctAnswers[q]}`);
+                    
+                    if (selected.value === correctAnswers[q]) {
+                        selectedOpt.classList.add("correct");
+                        score++;
+                    } else {
+                        selectedOpt.classList.add("incorrect");
+                        correctOpt.classList.add("correct");
+                    }
+                } else {
+                    const qNum = q.replace('mcq', '');
+                    document.getElementById(`opt-${qNum}${correctAnswers[q]}`).classList.add("correct");
+                }
+            }
+
+            const resultDiv = document.getElementById("mcq-result");
+            resultDiv.innerHTML = `You scored ${score} out of ${total}.`;
+            
+            if (score === total) {
+                resultDiv.style.color = "#27ae60";
+                resultDiv.innerHTML += " 🎉 Excellent reading comprehension!";
+            } else {
+                resultDiv.style.color = "#e74c3c";
+                resultDiv.innerHTML += " Check the green highlights for the correct answers.";
+            }
+        }
+
+        // Функція для перевірки вправи на вкладці Writing
+        function checkWritingGaps() {
+            const answers = {
+                w1: ["fall out"],
+                w2: ["order", "orders", "ordered"],
+                w3: ["accuse"],
+                w4: ["of"],
+                w5: ["deny"],
+                w6: ["identify with"],
+                w7: ["threaten to"],
+                w8: ["depends on"],
+                w9: ["talk"],
+                w10: ["into"]
+            };
+
+            let score = 0;
+            let total = Object.keys(answers).length;
+
+            for (let key in answers) {
+                const input = document.getElementById(key);
+                input.classList.remove("correct", "incorrect");
+                
+                let userAnswer = input.value.trim().toLowerCase();
+
+                if (userAnswer !== "") {
+                    if (answers[key].includes(userAnswer)) {
+                        input.classList.add("correct");
+                        score++;
+                    } else {
+                        input.classList.add("incorrect");
+                    }
+                } else {
+                    input.classList.add("incorrect");
+                }
+            }
+
+            const resultDiv = document.getElementById("writing-result");
+            resultDiv.innerHTML = `You scored ${score} out of ${total}.`;
+            
+            if (score === total) {
+                resultDiv.style.color = "#27ae60";
+                resultDiv.innerHTML += " 🎉 Perfect! You know these phrases very well.";
+            } else {
+                resultDiv.style.color = "#e74c3c";
+                resultDiv.innerHTML += " Keep trying! Check the red boxes.";
+            }
+        }
+    </script>
+
+</body>
+</html>
